@@ -1,41 +1,48 @@
-const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        type: 'OAuth2',
-        user: process.env.GOOGLE_USER,
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-    },
+const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET
+);
+
+oauth2Client.setCredentials({
+    refresh_token: process.env.GOOGLE_REFRESH_TOKEN
 });
 
-// Verify the connection configuration
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('Error connecting to email server:', error);
-    } else {
-        console.log('Email server is ready to send messages');
-    }
+const gmail = google.gmail({
+    version: 'v1',
+    auth: oauth2Client
 });
 
-// Function to send email
 const sendEmail = async (to, subject, text, html) => {
     try {
-        const info = await transporter.sendMail({
-            from: `"Your Name" <${process.env.GOOGLE_USER}>`, // sender address
-            to, // list of receivers
-            subject, // Subject line
-            text, // plain text body
-            html, // html body
+        const body = html || text || '';
+
+        const message = [
+            `From: ${process.env.GOOGLE_USER}`,
+            `To: ${to}`,
+            `Subject: ${subject}`,
+            'MIME-Version: 1.0',
+            'Content-Type: text/html; charset=UTF-8',
+            '',
+            body
+        ].join('\r\n');
+
+        const raw = Buffer.from(message).toString('base64url');
+
+        const response = await gmail.users.messages.send({
+            userId: 'me',
+            requestBody: { raw }
         });
 
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        console.log('Email sent:', response.data.id);
+
+        return response.data;
+
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('Email sending failed:', error.message);
+        throw error;
     }
 };
 
-module.exports = { sendEmail, transporter };
+module.exports = { sendEmail };

@@ -28,7 +28,8 @@ async function resgisterUser(req, res) {
             username,
             email,
             password: hash,
-            role
+            role,
+            verified: false
         })
 
         const otp = generateOTP()
@@ -41,21 +42,19 @@ async function resgisterUser(req, res) {
             otpHash
         })
 
-        await sendEmail(email, "OTP Verification", `Your OTP is ${otp}`, html)
+        try {
+            await sendEmail(email, "OTP Verification", `Your OTP is ${otp}`, html)
+        }
+        catch (emailError) {
+            await otpModel.deleteMany({ user: user._id });
+            await userModel.findByIdAndDelete(user._id);
 
-        const token = jwt.sign({
-            id: user._id,
-            role: user.role
-        }, process.env.JWT_SECRET, {
-            expiresIn: "7d"
-        })
+            console.error("Email error:", emailError.message);
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+            return res.status(502).json({
+                message: "Unable to send OTP. Please try again."
+            });
+        }
 
         return res.status(201).json({
             message: "Registration successful. OTP sent to your email.",
@@ -159,6 +158,20 @@ async function verifyEmail(req, res) {
         const user = await userModel.findByIdAndUpdate(otpRecord.user, { verified: true }, { new: true })
 
         await otpModel.deleteMany({ email })
+
+        const token = jwt.sign({
+            id: user._id,
+            role: user.role
+        }, process.env.JWT_SECRET, {
+            expiresIn: "7d"
+        })
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         return res.status(200).json({
             message: "Email verified successfully",
