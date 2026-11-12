@@ -8,20 +8,23 @@ import App from '../../App'
 import Verify from '../Register/Verify'
 import VerifyRoute from './VerifyRoute'
 import PrivacyPolicy from '../Privacy Policy/PrivacyPolicy'
+import Profile from '../Main/Profile'
 
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path='/' element={
-                <ProtectedRoute>
-                    <App />
-                </ProtectedRoute>
-            } />
+            {/* Protected Routed */}
+            <Route element={<ProtectedRoute />}>
+                <Route path='/' element={<App />} />
+                <Route path='/profile' element={<Profile />} />
+            </Route>
+
             <Route path='/login' element={
                 <PublicRoute>
                     <Login />
                 </PublicRoute>
             } />
+            
             <Route path='/signup' element={
                 <PublicRoute>
                     <Signup />
