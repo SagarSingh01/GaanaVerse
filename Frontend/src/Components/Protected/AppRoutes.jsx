@@ -9,6 +9,7 @@ import Verify from '../Register/Verify'
 import VerifyRoute from './VerifyRoute'
 import PrivacyPolicy from '../Privacy Policy/PrivacyPolicy'
 import Profile from '../Main/Profile'
+import Notification from '../Main/Notification'
 
 const AppRoutes = () => {
     return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
             <Route element={<ProtectedRoute />}>
                 <Route path='/' element={<App />} />
                 <Route path='/profile' element={<Profile />} />
+                <Route path='/notifications' element={<Notification />} />
             </Route>
 
             <Route path='/login' element={
