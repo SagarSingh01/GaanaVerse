@@ -14,19 +14,19 @@ function Verify() {
 
     const handleVerify = async (e) => {
         e.preventDefault()
+        setLoading(true)
 
         if (!email) return toast.error("Verification email not found. Please sign up again.")
         if (otp.length !== 6) return toast.error("Enter a valid 6-digit OTP")
 
         try {
-            setLoading(true)
             const response = await API.post("/api/auth/verify", { otp, email }, { withCredentials: true })
             setUser(response?.data.user)
             localStorage.removeItem("verifyEmail")
             toast.success(response?.data.message || "Email verified successfully")
             navigate("/", { replace: true })
         } catch (err) {
-            toast.error(err?.response?.data?.message || "Verification failed")
+            toast.error(err?.response.data.message || "Verification failed")
         } finally {
             setLoading(false)
         }

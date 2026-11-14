@@ -1,4 +1,3 @@
-import React from 'react'
 import Header from './Components/Main/Header'
 import Hero from './Components/Main/Hero'
 import Footer from './Components/Main/Footer'
@@ -6,11 +5,11 @@ import Footer from './Components/Main/Footer'
 const App = () => {
 
   return (
-    <div className='overflow-x-hidden'>
+    <>
       <Header />
       <Hero />
       <Footer />
-    </div>
+    </>
   )
 }
 

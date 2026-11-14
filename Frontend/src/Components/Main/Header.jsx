@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSpotify, FaHome, FaSearch } from "react-icons/fa";
 import {
@@ -21,7 +20,6 @@ function Header() {
     const navigate = useNavigate();
     const { user, setUser } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
-
     const isArtist = user?.role === "artist";
     const username = user?.username || "User";
     const initial = username.charAt(0).toUpperCase();
@@ -56,6 +54,12 @@ function Header() {
             focus: "focus-visible:ring-green-400"
         };
 
+    /* Sidebar Overflow */
+    useEffect(() => {
+        document.body.style.overflow = menuOpen ? "hidden" : "";
+        return () => document.body.style.overflow = "";
+    }, [menuOpen])
+
     const navigateTo = (path) => {
         navigate(path);
         setMenuOpen(false);
@@ -74,10 +78,10 @@ function Header() {
     };
 
     const navButton = `group relative flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-transparent px-4 py-2.5 text-sm font-semibold transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 ${isArtist
-            ? "text-violet-300 hover:border-violet-500/30 hover:bg-violet-500/15 hover:text-violet-200 hover:shadow-violet-500/10 focus-visible:ring-violet-400"
-            : "text-green-300 hover:border-green-500/30 hover:bg-green-500/15 hover:text-green-200 hover:shadow-green-500/10 focus-visible:ring-green-400"
+        ? "text-violet-300 hover:border-violet-500/30 hover:bg-violet-500/15 hover:text-violet-200 hover:shadow-violet-500/10 focus-visible:ring-violet-400"
+        : "text-green-300 hover:border-green-500/30 hover:bg-green-500/15 hover:text-green-200 hover:shadow-green-500/10 focus-visible:ring-green-400"
         }`;
-        
+
     return (
         <>
             <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/95 text-white shadow-lg shadow-black/10 backdrop-blur-xl">

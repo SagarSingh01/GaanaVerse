@@ -7,11 +7,9 @@ import { FiHeadphones, FiMusic, FiCheckCircle } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 function Signup() {
-
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
-
   const [showPassword, setShowPassword] = useState(false)
 
   const [formData, setFormData] = useState({

@@ -83,7 +83,7 @@ function Profile() {
                     <div className="relative px-5 pb-8 sm:px-8">
                         <div className="-mt-14 flex flex-col gap-5 sm:-mt-16 sm:flex-row sm:items-end sm:justify-between">
                             <div className="flex items-end gap-4">
-                                <motion.div whileHover={{ scale: 1.06, rotate: 2 }} transition={{ type: "spring", stiffness: 300 }} className={`flex size-28 items-center justify-center rounded-2xl border-4 border-neutral-900 bg-linear-to-br ${theme.avatar} text-4xl font-bold shadow-xl sm:size-32`}>
+                                <motion.div whileHover={{ scale: 1.06, rotate: 2 }} transition={{ type: "spring", stiffness: 300 }} className={`flex size-28 items-center justify-center rounded-2xl border-4 border-neutral-900 cursor-pointer bg-linear-to-br ${theme.avatar} text-4xl font-bold shadow-xl sm:size-32`}>
                                     {username.charAt(0).toUpperCase()}
                                 </motion.div>
                                 <div className="min-w-0 pb-2">
@@ -108,13 +108,13 @@ function Profile() {
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2">
-                        {details.map(({ label, value, icon: Icon, verified }, index) => (
+                        {details.map(({ label, value, icon: Icon, verified }) => (
                             <motion.div
                                 key={label}
                                 variants={itemVariants}
                                 whileHover={{ y: -4, scale: 1.01 }}
                                 transition={{ duration: 0.2 }}
-                                className={`group flex items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900 p-5 transition-all duration-300 hover:border-white/20 hover:bg-neutral-800 hover:shadow-xl ${theme.glow}`}
+                                className={`group flex items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900 p-5 transition-all duration-300 hover:border-white/20 hover:bg-neutral-800 hover:shadow-xl cursor-pointer ${theme.glow}`}
                             >
                                 <div className={`rounded-xl ${theme.bg} p-3 ${theme.accent} transition duration-300 group-hover:scale-110`}>
                                     <Icon size={21} />
