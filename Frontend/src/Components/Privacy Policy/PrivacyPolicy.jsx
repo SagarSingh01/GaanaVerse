@@ -1,25 +1,55 @@
-import { useRef } from "react"
-import { Link } from "react-router-dom"
-import { Link as ScrollLink } from "react-scroll"
+import { useRef } from "react";
+import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
+import { motion } from "framer-motion";
 import {
-    FaSpotify,
-    FaArrowLeft,
-    FaShieldAlt,
-    FaLock,
-    FaKey,
-    FaCookieBite,
-    FaEnvelope,
-} from "react-icons/fa"
+    FiShield,
+    FiArrowLeft,
+    FiLock,
+    FiKey,
+    FiDatabase,
+    FiMail,
+    FiArrowUpRight,
+    FiCheckCircle,
+    FiMusic,
+} from "react-icons/fi";
+import logo from "../../assets/logo.png";
 
-const LAST_UPDATED = "November 5, 2026"
-const CONTACT_EMAIL = "sagar12378089@gmail.com"
-const HEADER_OFFSET = -96 
+const LAST_UPDATED = "November 18, 2026";
+const CONTACT_EMAIL = "sagar12378089@gmail.com";
+const HEADER_OFFSET = -110;
+
+const theme = {
+    accent: "text-cyan-400",
+    soft: "bg-cyan-500/10",
+    border: "border-cyan-500/20",
+    borderHover: "hover:border-cyan-500/40",
+    hover: "hover:text-cyan-300",
+    glow: "bg-cyan-500/10",
+    dot: "bg-cyan-400",
+    gradient: "from-cyan-300 via-blue-400 to-indigo-400",
+    button: "from-cyan-500 to-blue-600",
+    tocHover: "hover:border-cyan-400",
+    tocActive: "[&.active]:border-cyan-400",
+};
 
 const highlights = [
-    { icon: FaLock, title: "Passwords are hashed", text: "We never store your password in plain text." },
-    { icon: FaKey, title: "Codes are protected", text: "Verification codes are hashed and deleted once used." },
-    { icon: FaCookieBite, title: "Secure sessions", text: "Login sessions use HTTP-only cookies." },
-]
+    {
+        icon: FiLock,
+        title: "Password Protection",
+        text: "Passwords are hashed before being stored.",
+    },
+    {
+        icon: FiKey,
+        title: "Secure Verification",
+        text: "Verification codes are hashed and deleted after use.",
+    },
+    {
+        icon: FiDatabase,
+        title: "Protected Sessions",
+        text: "Authentication sessions use HTTP-only cookies.",
+    },
+];
 
 const sections = [
     {
@@ -67,168 +97,371 @@ const sections = [
         title: "Changes to This Policy",
         content: "We may update this Privacy Policy when our application or data practices change. Updated versions will be published on this page with a revised date.",
     },
-]
+];
 
-const pad = (i) => String(i + 1).padStart(2, "0")
-const navLinks = [...sections, { id: "contact", title: "Contact Us" }]
+const pad = (index) => String(index + 1).padStart(2, "0");
 
-// Table of contents with smooth scrolling and active-section highlighting (react-scroll)
+const navLinks = [
+    ...sections,
+    { id: "contact", title: "Contact Us" },
+];
+
+// Animation settings
+const containerVariants = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.12,
+        },
+    },
+};
+
+const fadeUp = {
+    hidden: {
+        opacity: 0,
+        y: 25,
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.6,
+            ease: "easeOut",
+        },
+    },
+};
+
 function Toc({ className = "", onNavigate }) {
     return (
         <nav aria-label="Table of contents" className={className}>
-            {navLinks.map((s, i) => (
+            {navLinks.map((section, index) => (
                 <ScrollLink
-                    key={s.id}
-                    to={s.id}
-                    href={`#${s.id}`}
+                    key={section.id}
+                    to={section.id}
+                    href={`#${section.id}`}
                     spy
                     smooth
                     duration={400}
                     offset={HEADER_OFFSET}
                     activeClass="active"
                     onClick={onNavigate}
-                    className="block cursor-pointer border-l-2 border-transparent py-1.5 pl-4 text-sm text-zinc-500 transition hover:border-[#1ed760] hover:text-white [&.active]:border-[#1ed760] [&.active]:text-white"
+                    className={`block cursor-pointer border-l-2 border-transparent py-2 pl-4 text-sm text-zinc-500 transition-all duration-200 hover:text-white ${theme.tocHover} [&.active]:text-white ${theme.tocActive}`}
                 >
-                    {i < sections.length ? `${pad(i)}. ` : ""}
-                    {s.title}
+                    <span className={`mr-2 font-mono text-[10px] ${theme.accent} opacity-70`}>
+                        {index < sections.length ? pad(index) : "✦"}
+                    </span>
+                    {section.title}
                 </ScrollLink>
             ))}
         </nav>
-    )
+    );
 }
 
 function PrivacyPolicy() {
-    const mobileMenu = useRef(null)
+    const mobileMenu = useRef(null);
+    const currentYear = new Date().getFullYear();
 
     return (
-        <main className="min-h-screen bg-[#090909] text-white">
-            {/* Header */}
-            <header className="sticky top-0 z-10 border-b border-white/10 bg-[#090909]/90 backdrop-blur">
-                <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-                    <Link to="/" className="flex items-center gap-3">
-                        <FaSpotify className="text-3xl text-[#1ed760]" />
-                        <span className="text-lg font-bold tracking-tight">Spotify</span>
-                    </Link>
-                    <Link
-                        to="/"
-                        className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-zinc-300 transition hover:border-[#1ed760]/50 hover:text-white"
-                    >
-                        <FaArrowLeft className="text-xs" /> Back to Home
-                    </Link>
-                </div>
-            </header>
+        <main className="relative min-h-screen overflow-hidden bg-[#080B18] text-white">
+
+            {/* Background Effects */}
+            <div className={`pointer-events-none absolute -top-48 left-1/2 size-125 -translate-x-1/2 rounded-full ${theme.glow} blur-[150px]`} />
+
+            <motion.div
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                {/* Header */}
+                <header className="sticky top-0 z-50 border-b border-white/10 bg-[#080B18]/90 backdrop-blur-xl">
+                    <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+
+                        <Link to="/" className="group flex min-w-0 items-center gap-3">
+                            <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-500/20 bg-[#101629] transition-transform duration-300 group-hover:scale-105">
+                                <img
+                                    src={logo}
+                                    alt="GaanaVerse"
+                                    className="size-full object-contain p-1"
+                                />
+                            </div>
+
+                            <div className="min-w-0">
+                                <span className={`block truncate bg-linear-to-r ${theme.gradient} bg-clip-text text-base font-extrabold tracking-wide text-transparent sm:text-xl`}>
+                                    GaanaVerse
+                                </span>
+
+                                <p className="hidden text-[9px] font-semibold tracking-[0.18em] text-zinc-500 sm:block">
+                                    YOUR UNIVERSE. YOUR MUSIC.
+                                </p>
+                            </div>
+                        </Link>
+
+                        <Link
+                            to="/"
+                            className="group inline-flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-[#101629] px-2.5 py-2 text-xs font-semibold text-zinc-300 transition-all duration-300 hover:border-cyan-500/40 hover:text-cyan-300 sm:px-4 sm:py-2.5 sm:text-sm"
+                        >
+                            <FiArrowLeft
+                                size={16}
+                                className="transition-transform duration-300 group-hover:-translate-x-1"
+                            />
+                            <span className="hidden sm:inline">Back to Home</span>
+                        </Link>
+                    </div>
+                </header>
+            </motion.div>
 
             {/* Hero */}
-            <section className="border-b border-white/10">
-                <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-                    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#1ed760]/20 bg-[#1ed760]/10">
-                        <FaShieldAlt className="text-2xl text-[#1ed760]" />
-                    </div>
-                    <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-                        Privacy Policy
-                    </h1>
-                    <p className="mt-4 max-w-2xl leading-7 text-zinc-400">
-                        How we collect, use, store, and protect your information when you use
-                        Spotify Clone.
-                    </p>
-                    <p className="mt-5 inline-block rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-500">
-                        Last updated: {LAST_UPDATED}
-                    </p>
+            <motion.section
+                initial="hidden"
+                animate="visible"
+                variants={containerVariants}
+                className="relative border-b border-white/10"
+            >
+                <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
 
-                    {/* At a glance */}
-                    <div className="mt-10 grid gap-4 sm:grid-cols-3">
-                        {highlights.map(({ icon: Icon, title, text }) => (
-                            <div
-                                key={title}
-                                className="rounded-xl border border-white/10 bg-white/3 p-5"
-                            >
-                                <Icon className="text-lg text-[#1ed760]" />
-                                <h2 className="mt-3 text-sm font-semibold">{title}</h2>
-                                <p className="mt-1 text-sm leading-6 text-zinc-400">{text}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+                    <motion.div variants={fadeUp} className="max-w-3xl">
 
-            {/* Content */}
-            <div className="mx-auto grid max-w-6xl gap-12 px-5 py-12 lg:grid-cols-[220px_1fr]">
-                {/* Sidebar (desktop) */}
-                <aside className="hidden lg:block">
-                    <div className="sticky top-24">
-                        <p className="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                            On this page
+                        <div className={`mb-7 inline-flex items-center gap-2 rounded-full border ${theme.border} ${theme.soft} px-4 py-2`}>
+                            <FiShield size={14} className={theme.accent} />
+                            <span className={`text-[10px] font-bold uppercase tracking-[0.18em] ${theme.accent}`}>
+                                Your Privacy Matters
+                            </span>
+                        </div>
+
+                        <h1 className={`bg-linear-to-r ${theme.gradient} bg-clip-text text-4xl font-black leading-[1.2] tracking-tight text-transparent sm:text-5xl lg:text-6xl`}>
+                            Privacy Policy
+                        </h1>
+
+                        <p className="mt-6 max-w-2xl text-sm leading-8 text-zinc-400 sm:text-base">
+                            Transparency matters. Learn how GaanaVerse collects,
+                            uses, stores, and protects your information when
+                            you use our music platform.
                         </p>
+
+                        <div className="mt-7 flex flex-wrap items-center gap-3">
+                            <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-[#101629] px-3 py-2 text-xs text-zinc-400">
+                                <FiCheckCircle className={theme.accent} size={14} />
+                                Privacy & Security
+                            </span>
+
+                            <span className="rounded-lg border border-white/10 bg-[#101629] px-3 py-2 text-xs text-zinc-500">
+                                Last updated: {LAST_UPDATED}
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    {/* Security Highlights */}
+                    <motion.div
+                        variants={containerVariants}
+                        className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                    >
+                        {highlights.map(({ icon: Icon, title, text }) => (
+                            <motion.div
+                                key={title}
+                                variants={fadeUp}
+                                whileHover={{ y: -5 }}
+                                className={`group cursor-pointer rounded-2xl border border-white/10 bg-[#101629]/80 p-5 transition-colors duration-300 ${theme.borderHover}`}
+                            >
+                                <div className={`flex size-11 items-center justify-center rounded-xl ${theme.soft}`}>
+                                    <Icon size={20} className={theme.accent} />
+                                </div>
+
+                                <h2 className="mt-4 text-sm font-bold text-white">
+                                    {title}
+                                </h2>
+
+                                <p className="mt-2 text-xs leading-6 text-zinc-500">
+                                    {text}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </motion.section>
+
+            {/* Main Content */}
+            <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-14 lg:py-16">
+
+                {/* Desktop Table of Contents */}
+                <aside className="hidden lg:block">
+                    <div className="sticky top-28">
+                        <div className="mb-5 flex items-center gap-2">
+                            <div className={`size-1.5 rounded-full ${theme.dot}`} />
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+                                On this page
+                            </p>
+                        </div>
+
                         <Toc className="border-l border-white/10" />
+
+                        <div className="mt-8 rounded-xl border border-white/10 bg-[#101629] p-4">
+                            <FiShield className={`mb-3 ${theme.accent}`} size={20} />
+
+                            <p className="text-xs font-semibold text-white">
+                                Your trust matters
+                            </p>
+
+                            <p className="mt-2 text-xs leading-5 text-zinc-500">
+                                We aim to handle your information responsibly and transparently.
+                            </p>
+                        </div>
                     </div>
                 </aside>
 
+                {/* Policy Content */}
                 <div className="min-w-0">
-                    {/* Dropdown (mobile), closes after picking a section */}
-                    <details
+
+                    {/* Mobile Table of Contents */}
+                    <motion.details
                         ref={mobileMenu}
-                        className="mb-8 rounded-xl border border-white/10 bg-white/3 p-4 lg:hidden"
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-8 rounded-2xl border border-white/10 bg-[#101629] p-5 lg:hidden"
                     >
-                        <summary className="cursor-pointer text-sm font-semibold">
-                            On this page
+                        <summary className="flex cursor-pointer items-center justify-between text-sm font-bold text-white">
+                            <span className="flex items-center gap-2">
+                                <FiMusic className={theme.accent} />
+                                On this page
+                            </span>
+
+                            <span className="text-xs font-medium text-zinc-500">
+                                {navLinks.length} sections
+                            </span>
                         </summary>
+
                         <Toc
-                            className="mt-3 border-l border-white/10"
+                            className="mt-5 border-l border-white/10"
                             onNavigate={() => mobileMenu.current?.removeAttribute("open")}
                         />
-                    </details>
+                    </motion.details>
 
-                    {/* Policy sections */}
-                    <div className="divide-y divide-white/10">
-                        {sections.map((s, i) => (
-                            <section key={s.id} id={s.id} className="scroll-mt-24 py-8 first:pt-0">
-                                <h2 className="flex items-baseline gap-3 text-lg font-semibold tracking-tight sm:text-xl">
-                                    <span className="font-mono text-xs text-[#1ed760]">{pad(i)}</span>
-                                    {s.title}
-                                </h2>
-                                <p className="mt-3 pl-8 text-sm leading-7 text-zinc-400 sm:text-[15px]">
-                                    {s.content}
-                                </p>
-                            </section>
+                    {/* Policy Sections */}
+                    <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-[#101629]/60 px-5 sm:px-8">
+
+                        {sections.map((section, index) => (
+                            <motion.section
+                                key={section.id}
+                                id={section.id}
+                                initial={{ opacity: 0, y: 25 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.15 }}
+                                transition={{ duration: 0.55, ease: "easeOut" }}
+                                className="scroll-mt-32 py-8 first:pt-8"
+                            >
+                                <div className="flex items-start gap-4">
+                                    <span className={`mt-0.5 shrink-0 font-mono text-xs font-bold ${theme.accent}`}>
+                                        {pad(index)}
+                                    </span>
+
+                                    <div className="min-w-0">
+                                        <h2 className="text-lg font-bold tracking-tight text-white sm:text-xl">
+                                            {section.title}
+                                        </h2>
+
+                                        <p className="mt-4 text-sm leading-8 text-zinc-400 sm:text-[15px]">
+                                            {section.content}
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.section>
                         ))}
                     </div>
 
-                    {/* Contact */}
-                    <section
+                    {/* Contact Section */}
+                    <motion.section
                         id="contact"
-                        className="mt-10 scroll-mt-24 rounded-2xl border border-[#1ed760]/20 bg-[#1ed760]/5 p-6 sm:p-8"
+                        initial={{ opacity: 0, y: 25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.6 }}
+                        className={`relative mt-10 scroll-mt-32 overflow-hidden rounded-2xl border ${theme.border} bg-[#101629] p-6 sm:p-9`}
                     >
-                        <h2 className="flex items-center gap-3 text-xl font-bold">
-                            <FaEnvelope className="text-[#1ed760]" /> Contact Us
-                        </h2>
-                        <p className="mt-3 text-sm leading-7 text-zinc-400">
-                            Questions about your personal information or this policy? Reach out
-                            and we'll get back to you.
-                        </p>
-                        <a
-                            href={`mailto:${CONTACT_EMAIL}`}
-                            className="mt-5 inline-flex rounded-full bg-[#1ed760] px-5 py-2.5 text-sm font-bold text-black transition hover:bg-[#3be477]"
-                        >
-                            Contact Support
-                        </a>
-                    </section>
+                        <div className={`pointer-events-none absolute -right-16 -top-16 size-52 rounded-full ${theme.glow} blur-3xl`} />
+
+                        <div className="relative">
+                            <div className={`mb-5 flex size-12 items-center justify-center rounded-xl ${theme.soft}`}>
+                                <FiMail size={22} className={theme.accent} />
+                            </div>
+
+                            <h2 className="text-xl font-bold text-white sm:text-2xl">
+                                Questions about your privacy?
+                            </h2>
+
+                            <p className="mt-3 max-w-xl text-sm leading-7 text-zinc-400">
+                                If you have questions about your personal information,
+                                data handling, or this Privacy Policy, feel free to
+                                contact us.
+                            </p>
+
+                            <a
+                                href={`mailto:${CONTACT_EMAIL}`}
+                                className={`group mt-7 inline-flex items-center gap-2 rounded-xl bg-linear-to-r ${theme.button} px-5 py-3 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
+                            >
+                                Contact Support
+                                <FiArrowUpRight
+                                    size={16}
+                                    className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                />
+                            </a>
+                        </div>
+                    </motion.section>
                 </div>
             </div>
 
             {/* Footer */}
-            <footer className="border-t border-white/10">
-                <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-center sm:flex-row sm:text-left">
-                    <Link to="/" className="flex items-center gap-2 text-sm font-semibold">
-                        <FaSpotify className="text-xl text-[#1ed760]" /> Spotify Clone
-                    </Link>
-                    <p className="text-xs leading-6 text-zinc-400">
-                        © {new Date().getFullYear()} Spotify Clone. Independent educational
-                        project, not affiliated with Spotify AB.
-                    </p>
+            <motion.footer
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="relative border-t border-white/10 bg-[#080B18]"
+            >
+                <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8">
+
+                    <div className="flex flex-col items-center justify-between gap-5 text-center sm:flex-row sm:text-left">
+
+                        <Link to="/" className="group flex items-center gap-3">
+                            <div className="flex size-10 items-center justify-center overflow-hidden rounded-xl border border-cyan-500/20 bg-[#101629]">
+                                <img
+                                    src={logo}
+                                    alt="GaanaVerse"
+                                    className="size-full object-contain p-1"
+                                />
+                            </div>
+
+                            <div>
+                                <p className={`bg-linear-to-r ${theme.gradient} bg-clip-text text-sm font-extrabold text-transparent`}>
+                                    GaanaVerse
+                                </p>
+
+                                <p className="mt-1 text-[9px] tracking-widest text-zinc-600">
+                                    MUSIC. CREATIVITY. CONNECTION.
+                                </p>
+                            </div>
+                        </Link>
+
+                        <div className="text-center sm:text-right">
+                            <p className="text-xs text-zinc-500">
+                                © {currentYear} GaanaVerse. All rights reserved.
+                            </p>
+
+                            <p className="mt-2 text-[11px] text-zinc-600">
+                                An independent music streaming project.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-7 border-t border-white/5 pt-5 text-center">
+                        <p className="text-[10px] font-medium tracking-wider text-zinc-600">
+                            YOUR UNIVERSE. YOUR MUSIC.
+                        </p>
+                    </div>
                 </div>
-            </footer>
+            </motion.footer>
         </main>
-    )
+    );
 }
 
 export default PrivacyPolicy

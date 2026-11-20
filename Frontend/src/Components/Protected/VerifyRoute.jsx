@@ -1,18 +1,20 @@
 import { Navigate } from "react-router-dom";
 import useAuth from "../../Context Api/AuthContext";
 
-const VerifyRoute = ({ children }) => {
+function VerifyRoute({ children }) {
+    const { user } = useAuth();
 
-    const { user } = useAuth()
+    const pendingEmail = localStorage.getItem("verifyEmail");
 
-    const pendingEmail = localStorage.getItem("verifyEmail")
+    if (user?.verified) {
+        return <Navigate to="/" replace />;
+    }
 
-    if (user?.verified) return <Navigate to="/" replace />
+    if (!pendingEmail) {
+        return <Navigate to="/signup" replace />;
+    }
 
-    if (!pendingEmail) return <Navigate to="/signup" replace />
-
-    return children
-
+    return children;
 }
 
 export default VerifyRoute

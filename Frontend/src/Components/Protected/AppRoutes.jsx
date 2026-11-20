@@ -10,15 +10,37 @@ import VerifyRoute from './VerifyRoute'
 import PrivacyPolicy from '../Privacy Policy/PrivacyPolicy'
 import Profile from '../Main/Profile'
 import Notification from '../Main/Notification'
+import Upload from '../Artist/Upload'
+import RoleRoute from './RoleRoute'
+import Overview from '../Artist/Overview'
+import Hero from '../Main/Hero'
+import MusicPlayer from '../Musics/MusicPlayer'
 
-const AppRoutes = () => {
+function AppRoutes() {
     return (
         <Routes>
-            {/* Protected Routed */}
             <Route element={<ProtectedRoute />}>
-                <Route path='/' element={<App />} />
-                <Route path='/profile' element={<Profile />} />
-                <Route path='/notifications' element={<Notification />} />
+
+                {/* GaanaVerse */}
+                <Route element={<App />}>
+
+                    {/* Artist Dashboard */}
+                    <Route element={<RoleRoute userRole="artist" />}>
+                        <Route path='/artist' element={<Overview />} />
+                        <Route path='/artist/upload' element={<Upload />} />
+                        <Route path='/artist/profile' element={<Profile />} />
+                    </Route>
+
+                    {/* Listener Dashboard */}
+                    <Route element={<RoleRoute userRole="user" />}>
+                        <Route path='/' element={<Hero />} />
+                        <Route path='/music/:id' element={<MusicPlayer />} />
+                        <Route path='/profile' element={<Profile />} />
+                        <Route path='/notifications' element={<Notification />} />
+                    </Route>
+
+                </Route>
+
             </Route>
 
             <Route path='/login' element={
@@ -26,11 +48,12 @@ const AppRoutes = () => {
                     <Login />
                 </PublicRoute>
             } />
-            
+
             <Route path='/signup' element={
                 <PublicRoute>
                     <Signup />
-                </PublicRoute>} />
+                </PublicRoute>
+            } />
 
             {/* Verify */}
             <Route path='/verify' element={

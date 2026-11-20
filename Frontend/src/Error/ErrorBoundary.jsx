@@ -1,5 +1,10 @@
 import React from "react";
-import { FaExclamationTriangle, FaHome, FaRedo } from "react-icons/fa";
+import { motion } from "framer-motion";
+import {
+    FiAlertTriangle,
+    FiHome,
+    FiRefreshCw,
+} from "react-icons/fi";
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -32,31 +37,37 @@ class ErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6 text-white">
+                <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#090B18] px-6 text-white">
 
                     {/* Background Glow */}
-                    <div className="pointer-events-none absolute left-1/2 top-1/2 h-125 w-125 -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/5 blur-[120px]" />
+                    <div className="pointer-events-none absolute left-1/2 top-1/2 size-125 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D8BC82]/5 blur-[120px]" />
+                    <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-violet-500/10 blur-[100px]" />
 
                     {/* Main Content */}
-                    <div className="relative z-10 w-full max-w-xl text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 25 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative z-10 w-full max-w-xl text-center"
+                    >
 
                         {/* Error Icon */}
-                        <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-red-500/20 bg-red-500/10">
-                            <FaExclamationTriangle className="text-3xl text-red-500" />
+                        <div className="mx-auto mb-8 flex size-20 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10">
+                            <FiAlertTriangle className="text-3xl text-red-400" />
                         </div>
 
                         {/* Label */}
-                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-green-500">
+                        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-[#D8BC82]">
                             Unexpected Error
                         </p>
 
                         {/* Heading */}
-                        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+                        <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
                             Something went wrong
                         </h1>
 
                         {/* Description */}
-                        <p className="mx-auto mt-5 max-w-md text-base leading-7 text-gray-400">
+                        <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-zinc-400 sm:text-base">
                             Something unexpected happened while loading this
                             page. Please try again or return to the home page.
                         </p>
@@ -64,35 +75,36 @@ class ErrorBoundary extends React.Component {
                         {/* Buttons */}
                         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
 
-                            {/* Try Again */}
                             <button
                                 onClick={this.handleRetry}
-                                className="flex w-full items-center justify-center gap-2 rounded-full bg-green-500 px-7 py-3.5 font-semibold text-black transition-all duration-200 hover:scale-105 hover:bg-green-400 active:scale-95 sm:w-auto"
+                                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#D8BC82] px-7 py-3.5 font-semibold text-[#090B18] transition-all duration-200 hover:bg-[#E7D09F] active:scale-95 sm:w-auto"
                             >
-                                <FaRedo className="text-sm" />
+                                <FiRefreshCw size={17} />
                                 Try Again
                             </button>
 
-                            {/* Go Home */}
                             <button
                                 onClick={this.handleHome}
-                                className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-7 py-3.5 font-semibold text-white transition-all duration-200 hover:border-white/20 hover:bg-white/10 active:scale-95 sm:w-auto"
+                                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/10 bg-[#141629] px-7 py-3.5 font-semibold text-zinc-300 transition-all duration-200 hover:border-[#D8BC82]/30 hover:bg-[#1C2036] hover:text-white active:scale-95 sm:w-auto"
                             >
-                                <FaHome className="text-sm" />
+                                <FiHome size={17} />
                                 Go Home
                             </button>
 
                         </div>
 
                         {/* Footer */}
-                        <div className="mt-10 border-t border-white/5 pt-6">
-                            <p className="text-xs leading-5 text-gray-600">
+                        <div className="mt-12 border-t border-white/5 pt-6">
+                            <p className="text-xs leading-5 text-zinc-500">
                                 If the problem continues, try refreshing the
                                 page or come back again later.
                             </p>
+                            <p className="mt-4 text-[10px] tracking-[0.2em] text-zinc-700">
+                                GAANAVERSE • ERROR BOUNDARY
+                            </p>
                         </div>
 
-                    </div>
+                    </motion.div>
                 </div>
             );
         }
@@ -101,4 +113,4 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-export default ErrorBoundary;
+export default ErrorBoundary

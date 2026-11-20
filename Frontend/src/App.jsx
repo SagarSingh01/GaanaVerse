@@ -1,13 +1,13 @@
 import Header from './Components/Main/Header'
-import Hero from './Components/Main/Hero'
 import Footer from './Components/Main/Footer'
+import { Outlet } from 'react-router-dom'
 
 const App = () => {
 
   return (
     <>
       <Header />
-      <Hero />
+      <Outlet />
       <Footer />
     </>
   )

@@ -9,6 +9,12 @@ async function resgisterUser(req, res) {
     try {
         const { username, email, password, role = "user" } = req.body
 
+        if (role !== "user" && role !== "artist") {
+            return res.status(401).json({
+                message: "Invalid User Role"
+            })
+        }
+
         const isUserAlreadyExist = await userModel.findOne({
             $or: [
                 { username },

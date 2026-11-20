@@ -2,18 +2,18 @@ import { Navigate } from "react-router-dom";
 import useAuth from "../../Context Api/AuthContext";
 import Loading from "./Loading";
 
-const PublicRoute = ({ children }) => {
-    const { user, loading } = useAuth()
+function PublicRoute({ children }) {
+    const { user, loading } = useAuth();
 
     if (loading) {
-        return <Loading />
+        return <Loading />;
     }
 
     if (user) {
-        return <Navigate to="/" replace />
+        return <Navigate to="/" replace />;
     }
 
-    return children
+    return children;
 }
 
 export default PublicRoute

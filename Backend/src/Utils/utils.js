@@ -2,20 +2,31 @@ function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString()
 }
 
-function getOTPHtml(otp) {
-    const appName = "Spotify Clone";
-    const accent = "#1ed760";
+function getOTPHtml(otp, logoUrl) {
+    const appName = "GaanaVerse";
+    const tagline = "Your Universe. Your Music.";
     const expiryMinutes = 5;
     const year = new Date().getFullYear();
 
+    const colors = {
+        background: "#090B18",
+        card: "#141629",
+        panel: "#0D1020",
+        border: "#292B43",
+        gold: "#D8BC82",
+        lavender: "#B9A7F5",
+        text: "#F5F2FF",
+        muted: "#A5A3B8",
+    };
+
     const bars = [14, 24, 36, 24, 14]
-        .map(height => `
-            <td valign="bottom" style="padding:0 2px;">
+        .map((height, index) => `
+            <td valign="bottom" style="padding:0 3px;">
                 <div style="
                     width:6px;
                     height:${height}px;
-                    background:${accent};
-                    border-radius:4px;
+                    background:${index === 2 ? colors.gold : colors.lavender};
+                    border-radius:5px;
                     font-size:0;
                     line-height:${height}px;
                 ">&nbsp;</div>
@@ -30,14 +41,14 @@ function getOTPHtml(otp) {
     <meta name="color-scheme" content="dark">
     <meta name="supported-color-schemes" content="dark">
 
-    <title>${appName} - Email Verification</title>
+    <title>${appName} | Email Verification</title>
 
     <style>
         body {
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
-            background-color: #090909;
+            background-color: ${colors.background};
             font-family: Arial, Helvetica, sans-serif;
             -webkit-text-size-adjust: 100%;
         }
@@ -49,6 +60,8 @@ function getOTPHtml(otp) {
 
         img {
             border: 0;
+            outline: none;
+            text-decoration: none;
         }
 
         .email-container {
@@ -62,7 +75,7 @@ function getOTPHtml(otp) {
 
         .heading {
             font-size: 30px;
-            line-height: 1.25;
+            line-height: 1.3;
         }
 
         .otp-code {
@@ -77,12 +90,8 @@ function getOTPHtml(otp) {
                 padding: 20px 12px !important;
             }
 
-            .email-container {
-                width: 100% !important;
-            }
-
             .email-content {
-                padding: 32px 22px !important;
+                padding: 34px 22px !important;
             }
 
             .heading {
@@ -106,7 +115,7 @@ function getOTPHtml(otp) {
 
         @media only screen and (max-width: 360px) {
             .email-content {
-                padding: 26px 16px !important;
+                padding: 28px 16px !important;
             }
 
             .otp-code {
@@ -128,11 +137,11 @@ function getOTPHtml(otp) {
         opacity:0;
         color:transparent;
     ">
-        Your ${appName} verification code is ${otp}.
+        Your GaanaVerse verification code is ${otp}.
         It expires in ${expiryMinutes} minutes.
     </div>
 
-    <table role="presentation" width="100%" bgcolor="#090909">
+    <table role="presentation" width="100%" bgcolor="${colors.background}">
         <tr>
             <td align="center" class="outer-padding"
                 style="padding:50px 18px;">
@@ -141,22 +150,26 @@ function getOTPHtml(otp) {
                     role="presentation"
                     width="540"
                     class="email-container"
-                    bgcolor="#151515"
+                    bgcolor="${colors.card}"
                     style="
                         max-width:540px;
                         width:100%;
-                        background-color:#151515;
-                        border:1px solid #292929;
-                        border-radius:18px;
+                        background-color:${colors.card};
+                        border:1px solid ${colors.border};
+                        border-radius:20px;
                         overflow:hidden;
                     "
                 >
 
-                    <!-- Top accent -->
+                    <!-- Premium top accent -->
                     <tr>
-                        <td height="4"
-                            bgcolor="${accent}"
-                            style="height:4px;line-height:4px;font-size:0;">
+                        <td height="3"
+                            style="
+                                height:3px;
+                                line-height:3px;
+                                font-size:0;
+                                background-color:${colors.gold};
+                            ">
                             &nbsp;
                         </td>
                     </tr>
@@ -165,60 +178,97 @@ function getOTPHtml(otp) {
                     <tr>
                         <td class="email-content" align="center">
 
-                            <!-- Equalizer logo -->
+                            <!-- Actual GaanaVerse logo -->
                             <table role="presentation" align="center">
-                                <tr>${bars}</tr>
+                                <tr>
+                                    <td align="center">
+                                        <img
+                                            src="cid:gaanaverse-logo"
+                                            alt="GaanaVerse"
+                                            width="76"
+                                            height="76"
+                                            style="display:block; width:76px; height:76px; object-fit:contain;"
+                                        >
+                                    </td>
+                                </tr>
                             </table>
 
-                            <!-- Brand -->
+                            <!-- Brand name -->
                             <p style="
-                                margin:16px 0 0;
-                                color:#ffffff;
-                                font-size:14px;
+                                margin:18px 0 0;
+                                color:${colors.text};
+                                font-size:19px;
                                 font-weight:bold;
-                                letter-spacing:3px;
+                                letter-spacing:4px;
                                 text-transform:uppercase;
                             ">
                                 ${appName}
                             </p>
 
+                            <p style="
+                                margin:9px 0 0;
+                                color:${colors.gold};
+                                font-size:11px;
+                                letter-spacing:2px;
+                            ">
+                                ${tagline}
+                            </p>
+
+                            <!-- Divider -->
+                            <table role="presentation" width="55"
+                                style="margin:30px auto 0;">
+                                <tr>
+                                    <td height="1"
+                                        style="
+                                            height:1px;
+                                            background-color:${colors.gold};
+                                            font-size:0;
+                                            line-height:1px;
+                                        ">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+
                             <!-- Heading -->
                             <h1 class="heading" style="
-                                margin:38px 0 12px;
-                                color:#ffffff;
+                                margin:34px 0 14px;
+                                color:${colors.text};
                                 font-weight:700;
                             ">
-                                Verify your email
+                                A world of music awaits.
                             </h1>
 
                             <p class="description" style="
                                 margin:0;
-                                color:#a7a7a7;
+                                color:${colors.muted};
                                 font-size:15px;
-                                line-height:1.7;
+                                line-height:1.8;
                             ">
-                                You're one step away from enjoying your
-                                music. Enter the verification code below
-                                to complete your registration.
+                                You're just one step away from joining
+                                GaanaVerse. Verify your email address
+                                using the secure code below to complete
+                                your registration.
                             </p>
 
-                            <!-- OTP section -->
-                            <table role="presentation"
+                            <!-- OTP panel -->
+                            <table
+                                role="presentation"
                                 width="100%"
-                                bgcolor="#0d0d0d"
+                                bgcolor="${colors.panel}"
                                 style="
-                                    margin-top:32px;
-                                    border:1px solid #303030;
-                                    border-radius:14px;
+                                    margin-top:34px;
+                                    border:1px solid ${colors.border};
+                                    border-radius:16px;
                                 "
                             >
                                 <tr>
                                     <td align="center"
-                                        style="padding:30px 12px;">
+                                        style="padding:32px 12px;">
 
                                         <p style="
-                                            margin:0 0 18px;
-                                            color:#888888;
+                                            margin:0 0 20px;
+                                            color:${colors.muted};
                                             font-size:11px;
                                             font-weight:bold;
                                             letter-spacing:3px;
@@ -228,7 +278,7 @@ function getOTPHtml(otp) {
                                         </p>
 
                                         <div class="otp-code" style="
-                                            color:${accent};
+                                            color:${colors.gold};
                                             font-weight:bold;
                                             line-height:1.3;
                                             white-space:nowrap;
@@ -237,12 +287,12 @@ function getOTPHtml(otp) {
                                         </div>
 
                                         <p style="
-                                            margin:20px 0 0;
-                                            color:#a7a7a7;
+                                            margin:22px 0 0;
+                                            color:${colors.muted};
                                             font-size:12px;
                                         ">
-                                            Expires in
-                                            <strong style="color:#ffffff;">
+                                            Valid for
+                                            <strong style="color:${colors.text};">
                                                 ${expiryMinutes} minutes
                                             </strong>
                                         </p>
@@ -251,28 +301,31 @@ function getOTPHtml(otp) {
                                 </tr>
                             </table>
 
-                            <!-- Security message -->
-                            <table role="presentation"
+                            <!-- Security notice -->
+                            <table
+                                role="presentation"
                                 width="100%"
-                                bgcolor="#1d2a20"
+                                bgcolor="#1B1930"
                                 style="
                                     margin-top:24px;
-                                    border-left:3px solid ${accent};
-                                    border-radius:7px;
+                                    border-left:3px solid ${colors.lavender};
+                                    border-radius:8px;
                                 "
                             >
                                 <tr>
                                     <td style="
-                                        padding:16px;
-                                        color:#b7c5ba;
+                                        padding:17px;
+                                        color:#C3BEDA;
                                         font-size:13px;
-                                        line-height:1.7;
+                                        line-height:1.8;
                                     ">
-                                        <strong style="color:#ffffff;">
-                                            Keep your code safe.
+                                        <strong style="color:${colors.text};">
+                                            Your security matters.
                                         </strong>
-                                        Never share this verification
-                                        code with anyone.
+                                        <br>
+                                        Never share this code with anyone.
+                                        GaanaVerse will never ask you to
+                                        disclose your OTP.
                                     </td>
                                 </tr>
                             </table>
@@ -280,9 +333,9 @@ function getOTPHtml(otp) {
                             <!-- Ignore message -->
                             <p style="
                                 margin:30px 0 0;
-                                color:#858585;
+                                color:${colors.muted};
                                 font-size:12px;
-                                line-height:1.8;
+                                line-height:1.9;
                             ">
                                 Didn't request this verification?
                                 <br>
@@ -296,25 +349,35 @@ function getOTPHtml(otp) {
                     <tr>
                         <td class="footer"
                             align="center"
-                            bgcolor="#101010"
+                            bgcolor="#0D1020"
                             style="
-                                padding:26px 24px;
-                                border-top:1px solid #292929;
+                                padding:28px 24px;
+                                border-top:1px solid ${colors.border};
                             ">
 
                             <p style="
-                                margin:0;
-                                color:#777777;
-                                font-size:11px;
-                                line-height:1.8;
+                                margin:0 0 10px;
+                                color:${colors.gold};
+                                font-size:12px;
+                                font-weight:bold;
+                                letter-spacing:2px;
                             ">
+                                ${appName}
+                            </p>
+
+                            <p style="
+                                margin:0;
+                                color:#85849A;
+                                font-size:11px;
+                                line-height:1.9;
+                            ">
+                                ${tagline}
+                                <br>
                                 This is an automated email.
                                 Please do not reply.
                                 <br><br>
                                 &copy; ${year} ${appName}.
-                                <br>
-                                An independent learning project,
-                                not affiliated with Spotify AB.
+                                All rights reserved.
                             </p>
 
                         </td>
