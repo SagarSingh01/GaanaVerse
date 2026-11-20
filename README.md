@@ -10,7 +10,7 @@ Discover music, stream tracks, and give artists a platform to share their music.
 
 Built with React, Node.js, Express, and MongoDB.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_App-22d3ee?style=for-the-badge&logo=vercel&logoColor=black)](https://musics-spotify.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_App-22d3ee?style=for-the-badge&logo=vercel&logoColor=black)](https://gaanaverse.vercel.app)
 
 ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
